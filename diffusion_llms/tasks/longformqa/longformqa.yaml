@@ -1,0 +1,29 @@
+task: longformqa
+
+# Use KILT ELI5 since original eli5 is deprecated
+dataset_path: kilt_tasks
+dataset_name: eli5
+test_split: validation
+
+output_type: generate_until
+
+doc_to_text: |
+  You are a helpful expert. Provide a concise, self-contained explanation.
+
+  Question: {{input}}
+
+doc_to_target: "{{output.0.answer}}"
+
+generation_kwargs:
+  until:
+    - "</s>"
+    - "[/Answer]"
+  
+metric_list:
+  - metric: rouge
+    aggregation: mean
+    higher_is_better: true
+
+metadata:
+  version: 1.0
+  description: "ELI5-based LongFormQA with ROUGE-L"

@@ -1,0 +1,345 @@
+{
+  "experiment_name": "453436_benchmark",
+  "timestamp": "2026-01-28T03:42:38.364227",
+  "total_runs": 24,
+  "successful_runs": 19,
+  "failed_runs": 5,
+  "results": [
+    {
+      "task": "humaneval_instruct_local",
+      "quantile": 0.0,
+      "status": "skipped",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.00"
+    },
+    {
+      "task": "humaneval_instruct_local",
+      "quantile": 0.5,
+      "status": "skipped",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.50"
+    },
+    {
+      "task": "humaneval_instruct_local",
+      "quantile": 0.75,
+      "status": "skipped",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.75"
+    },
+    {
+      "task": "humaneval_instruct_local",
+      "quantile": 0.9,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.90",
+      "samples_count": 255,
+      "samples_valid": false
+    },
+    {
+      "task": "humaneval_instruct_local",
+      "quantile": 0.95,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.95",
+      "samples_count": 164,
+      "samples_valid": true
+    },
+    {
+      "task": "humaneval_instruct_local",
+      "quantile": 0.99,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.99",
+      "samples_count": 173,
+      "samples_valid": false
+    },
+    {
+      "task": "gsm8k_cot_llama",
+      "quantile": 0.0,
+      "status": "failed",
+      "return_code": 1,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/gsm8k_cot_llama/q0.00"
+    },
+    {
+      "task": "gsm8k_cot_llama",
+      "quantile": 0.5,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/gsm8k_cot_llama/q0.50",
+      "samples_count": 1320,
+      "samples_valid": false
+    },
+    {
+      "task": "gsm8k_cot_llama",
+      "quantile": 0.75,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/gsm8k_cot_llama/q0.75",
+      "samples_count": 1320,
+      "samples_valid": false
+    },
+    {
+      "task": "gsm8k_cot_llama",
+      "quantile": 0.9,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/gsm8k_cot_llama/q0.90",
+      "samples_count": 1320,
+      "samples_valid": false
+    },
+    {
+      "task": "gsm8k_cot_llama",
+      "quantile": 0.95,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/gsm8k_cot_llama/q0.95",
+      "samples_count": 1320,
+      "samples_valid": false
+    },
+    {
+      "task": "gsm8k_cot_llama",
+      "quantile": 0.99,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/gsm8k_cot_llama/q0.99",
+      "samples_count": 1320,
+      "samples_valid": false
+    },
+    {
+      "task": "ifeval",
+      "quantile": 0.0,
+      "status": "failed",
+      "return_code": 1,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/ifeval/q0.00"
+    },
+    {
+      "task": "ifeval",
+      "quantile": 0.5,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/ifeval/q0.50",
+      "samples_count": 542,
+      "samples_valid": false
+    },
+    {
+      "task": "ifeval",
+      "quantile": 0.75,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/ifeval/q0.75",
+      "samples_count": 542,
+      "samples_valid": false
+    },
+    {
+      "task": "ifeval",
+      "quantile": 0.9,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/ifeval/q0.90",
+      "samples_count": 542,
+      "samples_valid": false
+    },
+    {
+      "task": "ifeval",
+      "quantile": 0.95,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/ifeval/q0.95",
+      "samples_count": 542,
+      "samples_valid": false
+    },
+    {
+      "task": "ifeval",
+      "quantile": 0.99,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/ifeval/q0.99",
+      "samples_count": 542,
+      "samples_valid": false
+    },
+    {
+      "task": "longformqa",
+      "quantile": 0.0,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/longformqa/q0.00",
+      "samples_count": 1508,
+      "samples_valid": false
+    },
+    {
+      "task": "longformqa",
+      "quantile": 0.5,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/longformqa/q0.50",
+      "samples_count": 1508,
+      "samples_valid": false
+    },
+    {
+      "task": "longformqa",
+      "quantile": 0.75,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/longformqa/q0.75",
+      "samples_count": 1508,
+      "samples_valid": false
+    },
+    {
+      "task": "longformqa",
+      "quantile": 0.9,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/longformqa/q0.90",
+      "samples_count": 1508,
+      "samples_valid": false
+    },
+    {
+      "task": "longformqa",
+      "quantile": 0.95,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/longformqa/q0.95",
+      "samples_count": 1508,
+      "samples_valid": false
+    },
+    {
+      "task": "longformqa",
+      "quantile": 0.99,
+      "status": "success",
+      "return_code": 0,
+      "task_dir": "/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/longformqa/q0.99",
+      "samples_count": 1508,
+      "samples_valid": false
+    }
+  ],
+  "by_task": {
+    "humaneval_instruct_local": [
+      {
+        "quantile": 0.0,
+        "status": "skipped",
+        "samples_count": null
+      },
+      {
+        "quantile": 0.5,
+        "status": "skipped",
+        "samples_count": null
+      },
+      {
+        "quantile": 0.75,
+        "status": "skipped",
+        "samples_count": null
+      },
+      {
+        "quantile": 0.9,
+        "status": "success",
+        "samples_count": 255
+      },
+      {
+        "quantile": 0.95,
+        "status": "success",
+        "samples_count": 164
+      },
+      {
+        "quantile": 0.99,
+        "status": "success",
+        "samples_count": 173
+      }
+    ],
+    "gsm8k_cot_llama": [
+      {
+        "quantile": 0.0,
+        "status": "failed",
+        "samples_count": null
+      },
+      {
+        "quantile": 0.5,
+        "status": "success",
+        "samples_count": 1320
+      },
+      {
+        "quantile": 0.75,
+        "status": "success",
+        "samples_count": 1320
+      },
+      {
+        "quantile": 0.9,
+        "status": "success",
+        "samples_count": 1320
+      },
+      {
+        "quantile": 0.95,
+        "status": "success",
+        "samples_count": 1320
+      },
+      {
+        "quantile": 0.99,
+        "status": "success",
+        "samples_count": 1320
+      }
+    ],
+    "ifeval": [
+      {
+        "quantile": 0.0,
+        "status": "failed",
+        "samples_count": null
+      },
+      {
+        "quantile": 0.5,
+        "status": "success",
+        "samples_count": 542
+      },
+      {
+        "quantile": 0.75,
+        "status": "success",
+        "samples_count": 542
+      },
+      {
+        "quantile": 0.9,
+        "status": "success",
+        "samples_count": 542
+      },
+      {
+        "quantile": 0.95,
+        "status": "success",
+        "samples_count": 542
+      },
+      {
+        "quantile": 0.99,
+        "status": "success",
+        "samples_count": 542
+      }
+    ],
+    "longformqa": [
+      {
+        "quantile": 0.0,
+        "status": "success",
+        "samples_count": 1508
+      },
+      {
+        "quantile": 0.5,
+        "status": "success",
+        "samples_count": 1508
+      },
+      {
+        "quantile": 0.75,
+        "status": "success",
+        "samples_count": 1508
+      },
+      {
+        "quantile": 0.9,
+        "status": "success",
+        "samples_count": 1508
+      },
+      {
+        "quantile": 0.95,
+        "status": "success",
+        "samples_count": 1508
+      },
+      {
+        "quantile": 0.99,
+        "status": "success",
+        "samples_count": 1508
+      }
+    ]
+  }
+}

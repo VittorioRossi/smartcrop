@@ -1,0 +1,15 @@
+{
+  "model": "GSAI-ML/LLaDA-8B-Instruct",
+  "task": "gsm8k",
+  "num_samples": 500,
+  "total_processed": 500,
+  "context_sizes": [
+    256,
+    512,
+    1024,
+    2048,
+    4096
+  ],
+  "eos_quantile": 0.9,
+  "output_path": "/home/3188641/smartcrop/results/context_invariance/453591_run/results.jsonl"
+}

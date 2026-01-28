@@ -1,0 +1,250 @@
+==========================================
+SmartCrop Full Benchmark Evaluation
+==========================================
+Job ID: 453486
+Node: gnode08
+Start time: Tue Jan 27 12:47:19 AM CET 2026
+Output directory: /home/3188641/smartcrop/results/icml_2025/453436_benchmark
+==========================================
+
+--- Environment Info ---
+Python: /home/3188641/.conda/envs/diffusion_llms/bin/python
+Conda env: diffusion_llms
+CUDA_VISIBLE_DEVICES: 0,1
+MASTER_PORT: 13486
+
+--- GPU Status ---
+Tue Jan 27 00:47:19 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.95.05              Driver Version: 580.95.05      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 NVL                On  |   00000000:33:00.0 Off |                    0 |
+| N/A   42C    P0             60W /  310W |       0MiB /  95830MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 NVL                On  |   00000000:8B:00.0 Off |                    0 |
+| N/A   40C    P0             62W /  400W |       0MiB /  95830MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+--- Starting Evaluation ---
+
+============================================================
+SmartCrop SLURM Benchmark Runner
+============================================================
+Model: GSAI-ML/LLaDA-8B-Instruct
+Tasks: ['humaneval_instruct_local', 'gsm8k_cot_llama', 'ifeval', 'longformqa']
+Quantiles: [0.0, 0.5, 0.75, 0.9, 0.95, 0.99]
+Device: cuda
+Seed: 0
+Output: /home/3188641/smartcrop/results/icml_2025/453436_benchmark
+============================================================
+Checkpoint resume ENABLED: will skip already-completed tasks
+============================================================
+
+############################################################
+# TASK: humaneval_instruct_local
+############################################################
+============================================================
+SmartCrop SLURM Benchmark Runner
+============================================================
+Model: GSAI-ML/LLaDA-8B-Instruct
+Tasks: ['humaneval_instruct_local', 'gsm8k_cot_llama', 'ifeval', 'longformqa']
+Quantiles: [0.0, 0.5, 0.75, 0.9, 0.95, 0.99]
+Device: cuda
+Seed: 0
+Output: /home/3188641/smartcrop/results/icml_2025/453436_benchmark
+============================================================
+Checkpoint resume ENABLED: will skip already-completed tasks
+============================================================
+
+############################################################
+# TASK: humaneval_instruct_local
+############################################################
+
+============================================================
+Running: humaneval_instruct_local | Quantile: 0.0
+Output: /home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.00
+============================================================
+Command: /home/3188641/.conda/envs/diffusion_llms/bin/python3.10 /home/3188641/smartcrop/diffusion_llms/eval.py --include_path /home/3188641/smartcrop/diffusion_llms/tasks --tasks humaneval_instruct_local --model llada --device cuda --num_fewshot 0 --model_args pretrained=GSAI-ML/LLaDA-8B-Instruct,generation_mode=zero_shot,eos_quantile=0.0,safe_margin=0,measure_flops=True,max_new_tokens=512,temperature=0.1,steps=512,block_length=512,gen_length=512,trust_remote_code=True,logits_eos_inf=True,task_name=humaneval_instruct_local,debug_logpath=/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.00/rank_logs/generation.jsonl --seed 0 --output_path /home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.00 --confirm_run_unsafe_code
+
+============================================================
+Running: humaneval_instruct_local | Quantile: 0.0
+Output: /home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.00
+============================================================
+Command: /home/3188641/.conda/envs/diffusion_llms/bin/python3.10 /home/3188641/smartcrop/diffusion_llms/eval.py --include_path /home/3188641/smartcrop/diffusion_llms/tasks --tasks humaneval_instruct_local --model llada --device cuda --num_fewshot 0 --model_args pretrained=GSAI-ML/LLaDA-8B-Instruct,generation_mode=zero_shot,eos_quantile=0.0,safe_margin=0,measure_flops=True,max_new_tokens=512,temperature=0.1,steps=512,block_length=512,gen_length=512,trust_remote_code=True,logits_eos_inf=True,task_name=humaneval_instruct_local,debug_logpath=/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.00/rank_logs/generation.jsonl --seed 0 --output_path /home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.00 --confirm_run_unsafe_code
+Using CUDA
+DEBUG: Env MASTER_ADDR: 127.0.0.1
+DEBUG: Env MASTER_PORT: 13486
+DEBUG: Env RANK: 1
+Using CUDA
+DEBUG: Env MASTER_ADDR: 127.0.0.1
+DEBUG: Env MASTER_PORT: 13486
+DEBUG: Env RANK: 0
+gnode08:243584:243584 [1] NCCL INFO cudaDriverVersion 13000
+gnode08:243584:243584 [1] NCCL INFO Bootstrap: Using ibs5f0:192.168.2.8<0>
+gnode08:243584:243584 [1] NCCL INFO NCCL version 2.27.5+cuda12.9
+gnode08:243584:243584 [1] NCCL INFO Comm config Blocking set to 1
+gnode08:243584:243636 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+gnode08:243584:243636 [1] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB ibs5f0:192.168.2.8<0>
+gnode08:243584:243636 [1] NCCL INFO Initialized NET plugin IB
+gnode08:243584:243636 [1] NCCL INFO Assigned NET plugin IB to comm
+gnode08:243584:243636 [1] NCCL INFO Using network IB
+gnode08:243584:243636 [1] NCCL INFO DMA-BUF is available on GPU device 1
+gnode08:243584:243636 [1] NCCL INFO ncclCommInitRankConfig comm 0xe86f500 rank 1 nranks 2 cudaDev 1 nvmlDev 1 busId 8b000 commId 0xa90fdf1a1a9fbd95 - Init START
+gnode08:243584:243636 [1] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+gnode08:243584:243636 [1] NCCL INFO Bootstrap timings total 0.014416 (create 0.000024, send 0.000062, recv 0.000089, ring 0.000284, delay 0.000000)
+gnode08:243584:243636 [1] NCCL INFO comm 0xe86f500 rank 1 nRanks 2 nNodes 1 localRanks 2 localRank 1 MNNVL 0
+gnode08:243584:243636 [1] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] 0/-1/-1->1->-1 [2] -1/-1/-1->1->0 [3] 0/-1/-1->1->-1
+gnode08:243584:243636 [1] NCCL INFO P2P Chunksize set to 131072
+gnode08:243584:243636 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+gnode08:243584:243642 [1] NCCL INFO [Proxy Service] Device 1 CPU core 3
+gnode08:243584:243643 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 1
+gnode08:243584:243636 [1] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+gnode08:243584:243636 [1] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+gnode08:243584:243636 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+gnode08:243584:243636 [1] NCCL INFO ncclCommInitRankConfig comm 0xe86f500 rank 1 nranks 2 cudaDev 1 nvmlDev 1 busId 8b000 commId 0xa90fdf1a1a9fbd95 - Init COMPLETE
+gnode08:243584:243636 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 2 total 0.15 (kernels 0.12, alloc 0.01, bootstrap 0.01, allgathers 0.00, topo 0.00, graphs 0.00, connections 0.00, rest 0.00)
+gnode08:243584:243644 [1] NCCL INFO Channel 00 : 1[1] -> 0[0] via SHM/direct/direct
+gnode08:243584:243644 [1] NCCL INFO Channel 01 : 1[1] -> 0[0] via SHM/direct/direct
+gnode08:243584:243644 [1] NCCL INFO Channel 02 : 1[1] -> 0[0] via SHM/direct/direct
+gnode08:243584:243644 [1] NCCL INFO Channel 03 : 1[1] -> 0[0] via SHM/direct/direct
+gnode08:243584:243644 [1] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+gnode08:243584:246240 [1] NCCL INFO Channel 01 : 1[1] -> 0[0] via SHM/direct/direct
+gnode08:243584:246240 [1] NCCL INFO Channel 03 : 1[1] -> 0[0] via SHM/direct/direct
+gnode08:243584:246245 [1] NCCL INFO misc/socket.cc:64 -> 3
+gnode08:243584:246245 [1] NCCL INFO misc/socket.cc:81 -> 3
+gnode08:243584:246245 [1] NCCL INFO misc/socket.cc:863 -> 3
+gnode08:243584:246245 [1] NCCL INFO misc/socket.cc:64 -> 3
+gnode08:243584:246245 [1] NCCL INFO misc/socket.cc:81 -> 3
+gnode08:243584:246245 [1] NCCL INFO misc/socket.cc:863 -> 3
+gnode08:243584:243642 [1] NCCL INFO misc/socket.cc:915 -> 3
+gnode08:243584:246245 [1] NCCL INFO comm 0xe86f500 rank 1 nranks 2 cudaDev 1 busId 8b000 - Abort COMPLETE
+gnode08:243568:243568 [1] NCCL INFO cudaDriverVersion 13000
+gnode08:243568:243568 [1] NCCL INFO Bootstrap: Using ibs5f0:192.168.2.8<0>
+gnode08:243568:243568 [1] NCCL INFO NCCL version 2.27.5+cuda12.9
+gnode08:243568:243568 [1] NCCL INFO Comm config Blocking set to 1
+gnode08:243568:246247 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+gnode08:243568:246247 [1] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB ibs5f0:192.168.2.8<0>
+gnode08:243568:246247 [1] NCCL INFO Initialized NET plugin IB
+gnode08:243568:246247 [1] NCCL INFO Assigned NET plugin IB to comm
+gnode08:243568:246247 [1] NCCL INFO Using network IB
+gnode08:243568:246247 [1] NCCL INFO DMA-BUF is available on GPU device 1
+gnode08:243568:246247 [1] NCCL INFO ncclCommInitRankConfig comm 0xc79dae0 rank 1 nranks 2 cudaDev 1 nvmlDev 1 busId 8b000 commId 0xa90fdf1a1a9fbd95 - Init START
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (1/34) after sleep for 100 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (2/34) after sleep for 200 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (3/34) after sleep for 300 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (4/34) after sleep for 400 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (5/34) after sleep for 500 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (6/34) after sleep for 600 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (7/34) after sleep for 700 msec
+llada (pretrained=GSAI-ML/LLaDA-8B-Instruct,generation_mode=zero_shot,eos_quantile=0.0,safe_margin=0,measure_flops=True,max_new_tokens=512,temperature=0.1,steps=512,block_length=512,gen_length=512,trust_remote_code=True,logits_eos_inf=True,task_name=humaneval_instruct_local,debug_logpath=/home/3188641/smartcrop/results/icml_2025/453436_benchmark/by_task/humaneval_instruct_local/q0.00/rank_logs/generation.jsonl), gen_kwargs: (None), limit: None, num_fewshot: 0, batch_size: 1
+|         Tasks          |Version|  Filter   |n-shot|Metric|   |Value |   |Stderr|
+|------------------------|------:|-----------|-----:|------|---|-----:|---|-----:|
+|humaneval_instruct_local|      1|create_test|     0|pass@1|   |0.4634|±  |0.0391|
+
+gnode08:243583:243583 [0] NCCL INFO Bootstrap: Using ibs5f0:192.168.2.8<0>
+gnode08:243583:243583 [0] NCCL INFO cudaDriverVersion 13000
+gnode08:243583:243583 [0] NCCL INFO NCCL version 2.27.5+cuda12.9
+gnode08:243583:243583 [0] NCCL INFO Comm config Blocking set to 1
+gnode08:243583:243632 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+gnode08:243583:243632 [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB ibs5f0:192.168.2.8<0>
+gnode08:243583:243632 [0] NCCL INFO Initialized NET plugin IB
+gnode08:243583:243632 [0] NCCL INFO Assigned NET plugin IB to comm
+gnode08:243583:243632 [0] NCCL INFO Using network IB
+gnode08:243583:243632 [0] NCCL INFO DMA-BUF is available on GPU device 0
+gnode08:243583:243632 [0] NCCL INFO ncclCommInitRankConfig comm 0xf51b4a0 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 33000 commId 0xa90fdf1a1a9fbd95 - Init START
+gnode08:243583:243632 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+gnode08:243583:243632 [0] NCCL INFO Bootstrap timings total 0.290934 (create 0.000020, send 0.000050, recv 0.276616, ring 0.000011, delay 0.000000)
+gnode08:243583:243632 [0] NCCL INFO Setting affinity for GPU 0 to 0-3
+gnode08:243583:243632 [0] NCCL INFO comm 0xf51b4a0 rank 0 nRanks 2 nNodes 1 localRanks 2 localRank 0 MNNVL 0
+gnode08:243583:243632 [0] NCCL INFO Channel 00/04 : 0 1
+gnode08:243583:243632 [0] NCCL INFO Channel 01/04 : 0 1
+gnode08:243583:243632 [0] NCCL INFO Channel 02/04 : 0 1
+gnode08:243583:243632 [0] NCCL INFO Channel 03/04 : 0 1
+gnode08:243583:243632 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] -1/-1/-1->0->1 [2] 1/-1/-1->0->-1 [3] -1/-1/-1->0->1
+gnode08:243583:243632 [0] NCCL INFO P2P Chunksize set to 131072
+gnode08:243583:243632 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+gnode08:243583:243632 [0] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 0
+gnode08:243583:243640 [0] NCCL INFO [Proxy Service] Device 0 CPU core 3
+gnode08:243583:243641 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 1
+gnode08:243583:243632 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+gnode08:243583:243632 [0] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+gnode08:243583:243632 [0] NCCL INFO CC Off, workFifoBytes 1048576
+gnode08:243583:243632 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+gnode08:243583:243632 [0] NCCL INFO ncclCommInitRankConfig comm 0xf51b4a0 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 33000 commId 0xa90fdf1a1a9fbd95 - Init COMPLETE
+gnode08:243583:243632 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 2 total 0.43 (kernels 0.12, alloc 0.01, bootstrap 0.29, allgathers 0.00, topo 0.00, graphs 0.00, connections 0.00, rest 0.00)
+gnode08:243583:243645 [0] NCCL INFO Channel 00 : 0[0] -> 1[1] via SHM/direct/direct
+gnode08:243583:243645 [0] NCCL INFO Channel 01 : 0[0] -> 1[1] via SHM/direct/direct
+gnode08:243583:243645 [0] NCCL INFO Channel 02 : 0[0] -> 1[1] via SHM/direct/direct
+gnode08:243583:243645 [0] NCCL INFO Channel 03 : 0[0] -> 1[1] via SHM/direct/direct
+gnode08:243583:243645 [0] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (8/34) after sleep for 800 msec
+gnode08:243583:246269 [0] NCCL INFO misc/socket.cc:64 -> 3
+gnode08:243583:246269 [0] NCCL INFO misc/socket.cc:81 -> 3
+gnode08:243583:246269 [0] NCCL INFO misc/socket.cc:863 -> 3
+gnode08:243583:243640 [0] NCCL INFO misc/socket.cc:915 -> 3
+gnode08:243583:246269 [0] NCCL INFO misc/socket.cc:64 -> 3
+gnode08:243583:246269 [0] NCCL INFO misc/socket.cc:81 -> 3
+gnode08:243583:246269 [0] NCCL INFO misc/socket.cc:863 -> 3
+gnode08:243583:246269 [0] NCCL INFO comm 0xf51b4a0 rank 0 nranks 2 cudaDev 0 busId 33000 - Abort COMPLETE
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (9/34) after sleep for 900 msec
+gnode08:243567:243567 [0] NCCL INFO Bootstrap: Using ibs5f0:192.168.2.8<0>
+gnode08:243567:243567 [0] NCCL INFO cudaDriverVersion 13000
+gnode08:243567:243567 [0] NCCL INFO NCCL version 2.27.5+cuda12.9
+gnode08:243567:243567 [0] NCCL INFO Comm config Blocking set to 1
+gnode08:243567:246271 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+gnode08:243567:246271 [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB ibs5f0:192.168.2.8<0>
+gnode08:243567:246271 [0] NCCL INFO Initialized NET plugin IB
+gnode08:243567:246271 [0] NCCL INFO Assigned NET plugin IB to comm
+gnode08:243567:246271 [0] NCCL INFO Using network IB
+gnode08:243567:246271 [0] NCCL INFO DMA-BUF is available on GPU device 0
+gnode08:243567:246271 [0] NCCL INFO ncclCommInitRankConfig comm 0xdfde320 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 33000 commId 0x9b34554fe8b1c8ca - Init START
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (10/34) after sleep for 1000 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (11/34) after sleep for 1100 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (12/34) after sleep for 1200 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (13/34) after sleep for 1300 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (14/34) after sleep for 1400 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (15/34) after sleep for 1500 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (16/34) after sleep for 1600 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (17/34) after sleep for 1700 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (18/34) after sleep for 1800 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (19/34) after sleep for 1900 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (20/34) after sleep for 2000 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (21/34) after sleep for 2100 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (22/34) after sleep for 2200 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (23/34) after sleep for 2300 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (24/34) after sleep for 2400 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (25/34) after sleep for 2500 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (26/34) after sleep for 2600 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (27/34) after sleep for 2700 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (28/34) after sleep for 2800 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (29/34) after sleep for 2900 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (30/34) after sleep for 3000 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (31/34) after sleep for 3100 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (32/34) after sleep for 3200 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (33/34) after sleep for 3300 msec
+gnode08:243568:246247 [1] NCCL INFO socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, retrying (34/34) after sleep for 3400 msec
+
+[2026-01-27 01:21:13] gnode08:243568:246247 [1] misc/socket.cc:578 NCCL WARN socketPollConnect: connect to 192.168.2.8<54765> returned Connection refused, exceeded error retry count after 35 attempts
+gnode08:243568:246247 [1] NCCL INFO misc/socket.cc:669 -> 6
+gnode08:243568:246247 [1] NCCL INFO misc/socket.cc:718 -> 6
+gnode08:243568:246247 [1] NCCL INFO bootstrap.cc:608 -> 6
+gnode08:243568:246247 [1] NCCL INFO bootstrap.cc:690 -> 6
+gnode08:243568:246247 [1] NCCL INFO init.cc:1444 -> 6
+gnode08:243568:246247 [1] NCCL INFO group.cc:73 -> 6 [Async thread]
+gnode08:243568:243568 [1] NCCL INFO group.cc:475 -> 6
+gnode08:243568:243568 [1] NCCL INFO group.cc:694 -> 6
+gnode08:243568:243568 [1] NCCL INFO init.cc:1964 -> 6

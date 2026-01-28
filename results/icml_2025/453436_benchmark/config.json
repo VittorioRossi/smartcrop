@@ -1,0 +1,38 @@
+{
+  "model": "GSAI-ML/LLaDA-8B-Instruct",
+  "tasks": [
+    "humaneval_instruct_local",
+    "gsm8k_cot_llama",
+    "ifeval",
+    "longformqa"
+  ],
+  "quantiles": [
+    0.0,
+    0.5,
+    0.75,
+    0.9,
+    0.95,
+    0.99
+  ],
+  "device": "cuda",
+  "seed": 0,
+  "timestamp": "2026-01-27T09:59:13.030343",
+  "task_configs": {
+    "humaneval_instruct_local": {
+      "max_tokens": 512,
+      "steps": 512
+    },
+    "gsm8k_cot_llama": {
+      "max_tokens": 256,
+      "steps": 256
+    },
+    "ifeval": {
+      "max_tokens": 1280,
+      "steps": 1280
+    },
+    "longformqa": {
+      "max_tokens": 512,
+      "steps": 128
+    }
+  }
+}
