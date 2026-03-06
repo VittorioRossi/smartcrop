@@ -50,7 +50,7 @@ class LLaDa(nn.Module):
     ):
         super().__init__()
 
-        # For accessing faster
+        # For faster access in other classes
         self.d_model = 4096
 
         if cache_dir:
@@ -73,6 +73,7 @@ class LLaDa(nn.Module):
             else:
                 device = "cpu"
         self.device = device
+        
         # Freeze gradients and set in eval mode
         self.model = self.model.to(device).eval()
         for param in self.model.parameters():
@@ -86,9 +87,6 @@ class LLaDa(nn.Module):
         return self.model(input_ids)
 
     def get_last_hidden_state(self, input_ids):
-        # TODO: implement caching logic here
-        # by creating a lookup dict
-        # input_ids -> idx in tiledb object
         model_output = self.model(
             input_ids, return_dict=True, output_hidden_states=True
         )
@@ -122,7 +120,7 @@ class LLaDa(nn.Module):
         if tokenizer.mask_token_id is None:
             tokenizer.mask_token_id = self.mask_id
         
-        # Set pad token ID if not present (often same as EOS token)
+        # Set pad token ID if not present
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token_id = tokenizer.eos_token_id
 
@@ -153,7 +151,6 @@ class LLaDa(nn.Module):
         generated_text = tokenizer.batch_decode(
             generated_ids, skip_special_tokens=True
         )[0]
-        print(f"Generated IDs: {generated_ids}")
 
         return generated_text
 

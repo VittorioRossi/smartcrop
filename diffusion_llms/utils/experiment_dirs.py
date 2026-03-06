@@ -11,7 +11,7 @@ class ExperimentDirectoryManager:
 
     Creates and manages the following directory structure:
         results/
-        └── icml_2025/
+        └── preprint/
             └── {experiment_name}/
                 ├── config.json
                 ├── by_task/
@@ -34,21 +34,21 @@ class ExperimentDirectoryManager:
         >>> dirs.setup()
         >>> task_dir = dirs.get_task_quantile_dir("gsm8k_cot", 0.99)
         >>> print(task_dir)
-        /path/to/results/icml_2025/{timestamp}_benchmark/by_task/gsm8k_cot/q0.99
+        /path/to/results/preprint/{timestamp}_benchmark/by_task/gsm8k_cot/q0.99
     """
 
     def __init__(
         self,
         base_dir: Union[str, Path],
         experiment_name: Optional[str] = None,
-        submission_name: str = "icml_2025"
+        submission_name: str = "preprint"
     ):
         """Initialize experiment directory manager.
 
         Args:
             base_dir: Base results directory
             experiment_name: Name for this experiment run (default: timestamp)
-            submission_name: Submission identifier (default: icml_2025)
+            submission_name: Submission identifier (default: preprint)
         """
         self.base_dir = Path(base_dir)
         self.submission_name = submission_name

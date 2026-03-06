@@ -87,7 +87,7 @@ def run_benchmark_evaluation(
             sys.executable, "-m", "lm_eval",
             "--include_path", str(PROJECT_ROOT / "diffusion_llms" / "tasks"),
             "--tasks", task,
-            "--model", "GSAI-ML/LLaDA-8B-Instruct",  # Our registered model name
+            "--model", "llada",  # Our registered lm-eval model name
             "--device", device,
             "--num_fewshot", str(num_fewshot),
             "--model_args", model_args,

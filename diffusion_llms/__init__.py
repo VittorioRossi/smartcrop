@@ -1,8 +1,8 @@
 """
-Diffusion Language Models - More Efficient Text Diffusion via Length Prediction
+Diffusion Language Models - Diffusion Language Models Are Natively Length-Aware
 
 A research package for efficient text generation using diffusion language models
-with dynamic length prediction optimization.
+with dynamic length prediction optimization (SmartCrop).
 
 Authors:
 - Davide Beltrame

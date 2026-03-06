@@ -229,7 +229,7 @@ def config_to_dataclass(config: Dict[str, Any]) -> TrainingConfig:
 
 def load_training_config() -> TrainingConfig:
     """Main function to load and validate training configuration."""
-    print("🔧 Loading training configuration...")
+    print("Loading training configuration...")
 
     # Parse arguments
     args = parse_args()
@@ -249,11 +249,11 @@ def load_training_config() -> TrainingConfig:
     # Convert to dataclass
     training_config = config_to_dataclass(config)
 
-    print("✅ Configuration loaded successfully!")
-    print(f"   Model: {training_config.model_type}")
-    print(f"   Run: {training_config.run_name}")
-    print(f"   Batch size: {training_config.batch_size}")
-    print(f"   Learning rate: {training_config.learning_rate}")
+    print("Configuration loaded successfully!")
+    print(f" Model: {training_config.model_type}")
+    print(f" Run: {training_config.run_name}")
+    print(f" Batch size: {training_config.batch_size}")
+    print(f" Learning rate: {training_config.learning_rate}")
 
     return training_config
 

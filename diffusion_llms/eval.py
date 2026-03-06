@@ -122,6 +122,7 @@ class VarLengthEvalHarness(LM):
         max_length = kwargs.get("max_length", 512)
         remasking = kwargs.get("remasking", "low_confidence")
         eos_quantile = kwargs.get("eos_quantile", 0)
+        safe_margin = kwargs.get("safe_margin", 16)
         trust_remote_code = kwargs.get("trust_remote_code", "True")
         if isinstance(trust_remote_code, str):
             trust_remote_code = trust_remote_code.lower() == "true"
@@ -147,36 +148,13 @@ class VarLengthEvalHarness(LM):
         self._rank = accelerator.process_index
         self._world_size = accelerator.num_processes
         
-        import logging
-        logger = logging.getLogger(__name__)
-        
-        logger.info(f"DEBUG: Initialized Accelerator. Rank: {self._rank}, World Size: {self._world_size}")
-        logger.info(f"DEBUG: Accelerator State: {accelerator.state}")
-        
         # Explicitly set the device to ensure NCCL binds correctly
         if accelerator.num_processes > 1:
             # Use process_index to ensure unique device assignment
             device_index = accelerator.process_index % torch.cuda.device_count()
             torch.cuda.set_device(device_index)
-            logger.info(f"DEBUG: Set CUDA device to index {device_index} (accelerator.device={accelerator.device})")
-            
-            # Log physical device details
-            try:
-                props = torch.cuda.get_device_properties(device_index)
-                logger.info(f"DEBUG: Device Name: {props.name}")
-                logger.info(f"DEBUG: Device Total Memory: {props.total_memory}")
-                # UUID might not be directly available in properties in older torch, but let's try
-            except Exception as e:
-                logger.info(f"DEBUG: Could not get device properties: {e}")
 
-            
         import os
-        logger.info(f"DEBUG: Env LOCAL_RANK: {os.environ.get('LOCAL_RANK')}")
-        logger.info(f"DEBUG: Env WORLD_SIZE: {os.environ.get('WORLD_SIZE')}")
-        logger.info(f"DEBUG: Env CUDA_VISIBLE_DEVICES: {os.environ.get('CUDA_VISIBLE_DEVICES')}")
-        print(f"DEBUG: Env MASTER_ADDR: {os.environ.get('MASTER_ADDR')}")
-        print(f"DEBUG: Env MASTER_PORT: {os.environ.get('MASTER_PORT')}")
-        print(f"DEBUG: Env RANK: {os.environ.get('RANK')}")
 
         # Load model with appropriate device_map based on distributed setup
         # When using accelerate multi-GPU, device_map must be None
@@ -245,7 +223,7 @@ class VarLengthEvalHarness(LM):
             remasking=self.remasking,
             cfg_scale=self.cfg,
             eos_quantile=eos_quantile,
-            safe_margin=16,
+            safe_margin=safe_margin,
             return_dict_in_generate=True,
             measure_flops=True,
             logits_eos_inf=self.logits_eos_inf,
@@ -327,7 +305,6 @@ class VarLengthEvalHarness(LM):
         ds = ds.with_format("torch")
 
         # 2. Process all requests (lm-eval already sharded for multi-GPU)
-        # No manual sharding needed - lm-eval with accelerate handles it
         desc = f"Rank {self._rank}/{self._world_size}" if self._world_size > 1 else "Generating"
 
         # 3. Process all requests
@@ -413,7 +390,6 @@ class VarLengthEvalHarness(LM):
             results.append(final_answer)
 
         # 4. Return results directly - lm-eval handles result gathering across ranks
-        # No need to gather here because lm-eval already manages distributed evaluation
         return results
 
 if __name__ == "__main__":

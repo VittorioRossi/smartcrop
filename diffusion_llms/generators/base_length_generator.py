@@ -2,6 +2,10 @@
 
 Core masked diffusion generation logic with optional pre-computed
 `length_prediction` and per-step callback. Supports FLOPs accounting.
+
+The masked diffusion loop follows the generation procedure from LLaDA
+(Nie et al., 2025 — https://arxiv.org/abs/2502.09992), adapted to support
+dynamic canvas cropping, block-wise decoding, and FLOPs tracking.
 """
 
 from dataclasses import dataclass
@@ -21,7 +25,7 @@ from diffusion_llms.utils.generation_utils import (
     PromptInput,
     convert_prompts_to_tensors,
 )
-from diffusion_llms.utils.common import add_gumbel_noise, _ensure_token_id
+from diffusion_llms.utils.common import add_gumbel_noise, ensure_token_id
 
 
 @dataclass
@@ -94,17 +98,17 @@ class BaseLengthGenerator(BaseGenerator):
         inputs = convert_prompts_to_tensors(prompts, device)
 
 
-        mask_id = _ensure_token_id(
+        mask_id = ensure_token_id(
             getattr(self.tokenizer, "mask_token_id", None), 
             "mask_token_id", 
             tokenizer=self.tokenizer,
             candidates=["<mask>", "[MASK]", "<|mask|>", "<|mdm_mask|>", "[gMASK]"]
         )
-        eos_id = _ensure_token_id(getattr(self.tokenizer, "eos_token_id", None), "eos_token_id", tokenizer=self.tokenizer)
+        eos_id = ensure_token_id(getattr(self.tokenizer, "eos_token_id", None), "eos_token_id", tokenizer=self.tokenizer)
 
         prompt_lens = [int(p.shape[0]) for p in inputs]
 
-        if max_new_tokens and max_new_tokens > 0:
+        if max_new_tokens > 0:
             max_length = max_new_tokens + max(prompt_lens)
         else:
             max_new_tokens = max_length - max(prompt_lens)

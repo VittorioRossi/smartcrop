@@ -21,10 +21,10 @@ from diffusion_llms.generators.base_length_generator import (
 from diffusion_llms.utils.generation_utils import (
     compute_zero_shot_length_prediction,
 )
+from diffusion_llms.utils.common import ensure_token_id
 from dllm.core.generation.generator import (
     GeneratorOutput,
-    GeneratorConfig,
-    BaseGenerator
+    GeneratorConfig
 )
 
 @dataclass
@@ -82,7 +82,7 @@ class ZeroShotGenerator(BaseLengthGenerator):
                     torch.as_tensor(p, dtype=torch.long, device=self.model.device)
                 )
 
-        # If external length_prediction not provided and eos_quantile enabled, predict.
+        # If external length_prediction not provided and eos_quantile enabled, predict
         predicted_length: int | None = None
         if (
             config.length_prediction is None
@@ -90,39 +90,16 @@ class ZeroShotGenerator(BaseLengthGenerator):
             and len(tensor_prompts) == 1
         ):
             prompt_tensor = tensor_prompts[0]
-            def _resolve_token_id(raw_id, candidates: list[str], name: str) -> int:
-                # 1. If we already have a valid int, return it
-                if isinstance(raw_id, int):
-                    return raw_id
-                
-                # 2. Try to resolve from candidates using the tokenizer
-                # We check if the token is in the vocab to avoid getting unk_token_id silently
-                vocab = getattr(self.tokenizer, "get_vocab", lambda: {})()
-                convert = getattr(self.tokenizer, "convert_tokens_to_ids", None)
-                
-                if callable(convert):
-                    for cand in candidates:
-                        # Check existence first if possible
-                        if vocab and cand in vocab:
-                            return convert(cand)
-                        # Fallback: just try converting and see if it looks valid (not None)
-                        # Note: Some tokenizers return unk_id for missing tokens, which is risky but 
-                        # better than crashing if we really need a mask id.
-                        cid = convert(cand)
-                        if isinstance(cid, int):
-                            return cid
-
-                raise TypeError(f"Could not resolve {name}. Raw: {raw_id!r}. Tried candidates: {candidates}")
-
-            mask_id = _resolve_token_id(
-                getattr(self.tokenizer, "mask_token_id", None), 
-                ["<mask>", "[MASK]", "<|mask|>", "<|mdm_mask|>", "[gMASK]"], 
-                "mask_token_id"
+            mask_id = ensure_token_id(
+                getattr(self.tokenizer, "mask_token_id", None),
+                "mask_token_id",
+                tokenizer=self.tokenizer,
+                candidates=["<mask>", "[MASK]", "<|mask|>", "<|mdm_mask|>", "[gMASK]"],
             )
-            eos_id = _resolve_token_id(
-                getattr(self.tokenizer, "eos_token_id", None), 
-                ["</s>", "<|endoftext|>", "[SEP]", ], 
-                "eos_token_id"
+            eos_id = ensure_token_id(
+                getattr(self.tokenizer, "eos_token_id", None),
+                "eos_token_id",
+                tokenizer=self.tokenizer,
             )
             predicted_length = compute_zero_shot_length_prediction(
                 model=self.model,
@@ -135,7 +112,7 @@ class ZeroShotGenerator(BaseLengthGenerator):
                 device=self.model.device,
             )
 
-        # Build a base config clone and set length_prediction if we inferred one.
+        # Build a base config clone and set length_prediction if we inferred one
         base_cfg = BaseLengthGeneratorConfig()
         for attr in [
             "max_new_tokens",

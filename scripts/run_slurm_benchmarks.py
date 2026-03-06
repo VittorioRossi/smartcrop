@@ -19,12 +19,12 @@ Usage:
     sbatch scripts/slurm/run_benchmarks.slurm
 
     # Resume from previous run
-    python scripts/run_slurm_benchmarks.py --output_dir results/icml_2025/453436_benchmark
+    python scripts/run_slurm_benchmarks.py --output_dir results/preprint/453436_benchmark
 
 Features:
     - Proper multi-GPU data sharding via accelerate launch (internally)
     - Checkpoint resume: skips completed tasks based on results_*.json
-    - Structured output: results/icml_2025/{experiment}/by_task/{task}/q{quantile}/
+    - Structured output: results/preprint/{experiment}/by_task/{task}/q{quantile}/
     - Complete per-sample results (FLOPs, queries, answers)
     - Automatic log merging after each task/quantile
     - Aggregated summary across all runs
@@ -374,7 +374,7 @@ def main():
         "--output_dir",
         type=str,
         default=None,
-        help="Output directory (default: results/icml_2025/<timestamp>_benchmark)",
+        help="Output directory (default: results/preprint/<timestamp>_benchmark)",
     )
 
     parser.add_argument(

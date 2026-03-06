@@ -24,21 +24,6 @@ This directory contains custom evaluation task configurations for LLaDA.
 
 ## Usage
 
-### SLURM Jobs
-Run the evaluation jobs on HPC:
-
-```bash
-# SimpleQA evaluation
-sbatch jobs/slurm/simpleqa-llada.sh
-
-# LongFormQA evaluation  
-sbatch jobs/slurm/longformqa-llada.sh
-
-# WMT14 translation evaluation
-sbatch jobs/slurm/wmt14-llada.sh
-```
-
-### Local Testing
 For local testing, you can run the evaluation directly:
 
 ```bash
@@ -52,19 +37,6 @@ accelerate launch diffusion_llms/eval_llada.py \
   --output_path results/simpleqa_test.json
 ```
 
-## File Structure
-
-```
-eval_tasks/
-├── __init__.py
-├── simpleqa/
-│   ├── __init__.py
-│   └── simpleqa.yaml
-└── longformqa/
-    ├── __init__.py
-    └── longformqa.yaml
-```
-
 ## Requirements
 
 These evaluations require the following Python packages:
@@ -73,4 +45,4 @@ These evaluations require the following Python packages:
 - `sacrebleu`
 - `datasets`
 
-The SLURM scripts automatically install these if missing.
+

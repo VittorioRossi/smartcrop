@@ -48,7 +48,7 @@ unset ACCELERATE_CONFIG_FILE
 # Get a random port to avoid collisions with other jobs
 export MASTER_PORT=$(expr 10000 + $(echo -n $SLURM_JOBID | tail -c 4))
 
-export OUTPUT_DIR="${PROJECT_DIR}/results/icml_2025/453436_benchmark"
+export OUTPUT_DIR="${PROJECT_DIR}/results/preprint/453436_benchmark"
 mkdir -p "$OUTPUT_DIR"
 mkdir -p "$USER_HOME/logs/slurm"  # Ensure log directory exists
 

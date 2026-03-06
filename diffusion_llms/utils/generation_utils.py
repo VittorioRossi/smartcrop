@@ -37,35 +37,6 @@ def convert_prompts_to_tensors(prompts: PromptInput, device: torch.device) -> li
     return tensor_prompts
 
 
-def cut_input_at_eos(
-    x: torch.Tensor,
-    eos_id: int,
-) -> torch.Tensor:
-    """
-    Cut input sequences at the first occurrence of EOS token.
-
-    Args:
-        x: Input tensor [B, T]
-        eos_id: End-of-sequence token ID
-
-    Returns:
-        x_cut: Tensor with sequences cut at EOS [B, T_cut]
-    """
-    B, T = x.shape
-    cut_lengths = []
-    for i in range(B):
-        seq = x[i]
-        eos_positions = (seq == eos_id).nonzero(as_tuple=True)[0]
-        if len(eos_positions) > 0:
-            cut_length = eos_positions[0].item() + 1  # Include EOS token
-        else:
-            cut_length = T  # No EOS found, keep full length
-        cut_lengths.append(cut_length)
-
-    max_cut_length = max(cut_lengths)
-    x_cut = x[:, :max_cut_length]
-    return x_cut
-
 def estimate_forward_flops(
     model: torch.nn.Module,
     seq_len: int,

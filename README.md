@@ -1,10 +1,10 @@
 # SmartCrop: Zero-Shot Length Prediction for Efficient Diffusion Language Models
 
-**Reproducibility Package for Academic Paper Submission**
-
 This repository contains the evaluation code and scripts to replicate all experiments from the paper "More Efficient Text Diffusion via Length Prediction."
 
-## Quick Start
+`diffusion_llms/` is the core package containing the evaluation code, generation strategies, and utilities for tracking efficiency metrics. The `scripts/` directory contains the main entry points for running the benchmark evaluations and quality-length trade-off analysis. Pre-computed results and visualizations are available in the `figures/` directory.
+
+## Usage
 
 ```bash
 # 1. Clone and setup
@@ -21,38 +21,6 @@ python scripts/run_experiments.py --experiment benchmarks --device cuda
 
 # 4. Run quality-length sweep (Figure 2)
 python scripts/run_quality_length_sweep.py --task ifeval --device cuda
-```
-
-## Repository Structure
-
-```
-smartcrop-submission/
-├── README.md                     # This file
-├── requirements.txt              # Python dependencies
-├── scripts/
-│   ├── run_experiments.py        # Main entrypoint for benchmark evaluations
-│   └── run_quality_length_sweep.py # Quality-length trade-off analysis
-├── diffusion_llms/               # Core evaluation package
-│   ├── eval.py                   # lm-eval harness integration
-│   ├── generators/               # Generation strategies
-│   │   ├── base_length_generator.py
-│   │   ├── zero_shot_generator.py
-│   │   └── adapter_generator.py
-│   ├── utils/                    # Utilities
-│   │   ├── generation_utils.py   # Zero-shot length prediction
-│   │   ├── efficiency_metrics.py # NFE and FLOPS tracking
-│   │   └── model_utils.py        # Model loading helpers
-│   ├── tasks/                    # Custom lm-eval tasks
-│   │   ├── humaneval/
-│   │   └── longformqa/
-│   └── models/                   # Model-specific code
-│       └── llada.py
-└── figures/                      # Pre-computed visualizations
-    ├── table_1.pdf               # Main results table
-    ├── distribution_q0.99.png    # Length distribution at q=0.99
-    ├── quality_length_sweep.png  # HumanEval sweep results
-    ├── quality_length_sweep_ifeval.png
-    └── *_len_perf_corr.png       # Correlation plots
 ```
 
 ## Hardware Requirements
@@ -86,8 +54,8 @@ python scripts/run_experiments.py --tasks ifeval --quantiles 0.0 0.99 --device c
 **Tasks available:**
 - `humaneval_instruct_local` - Code generation (HumanEval)
 - `gsm8k_cot` - Math reasoning (GSM8K with chain-of-thought)
-- `ifeval` - Instruction following
-- `longformqa` - Long-form question answering
+- `ifeval` - Instruction following (IFEval)
+- `longformqa` - Long-form question answering (LongFormQA)
 
 **Quantiles:**
 - `0.0` - Native baseline (no length prediction)
@@ -108,14 +76,11 @@ python scripts/run_quality_length_sweep.py --task humaneval_instruct_local --dev
 python scripts/run_quality_length_sweep.py --dummy --num_samples 5
 ```
 
-This experiment:
-1. Predicts optimal generation length for each sample
-2. Generates at various deviations (-50% to +50% from predicted)
-3. Compares against shuffled lengths (random baseline) and full-length generation
+This experiment predicts optimal generation length for each sample, generates at various deviations (-50% to +50% from predicted) and compares against shuffled lengths (random baseline) and full-length generation.
 
 ## Model
 
-All experiments use **LLaDA-8B-Instruct** (`GSAI-ML/LLaDA-8B-Instruct`), a state-of-the-art diffusion language model.
+All experiments use **LLaDA-8B-Instruct** ([`GSAI-ML/LLaDA-8B-Instruct`](https://huggingface.co/GSAI-ML/LLaDA-8B-Instruct)), a state-of-the-art diffusion language model.
 
 The model is automatically downloaded from Hugging Face Hub on first run.
 
@@ -205,11 +170,11 @@ export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 If you use this code, please cite:
 
 ```bibtex
-@article{smartcrop2025,
-  title={More Efficient Text Diffusion via Length Prediction},
-  author={Beltrame, Davide and Cir\`o, Giacomo and Gandolfi, Luca and Rossi, Vittorio},
+@article{smartcrop2026,
+  title={Diffusion Language Models Are Natively Length-Aware},
+  author={Rossi, Vittorio and Cir\`{o}, Giacomo and Beltrame, Davide and Gandolfi, Luca and R{\"o}ttger, Paul and Hovy, Dirk},
   journal={arXiv preprint},
-  year={2025}
+  year={2026}
 }
 ```
 

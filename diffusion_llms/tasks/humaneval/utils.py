@@ -1,5 +1,4 @@
 import re
-from lm_eval.tasks.humaneval.utils import pass_at_k, build_predictions
 
 def humaneval_postprocess_v2(resps, docs):
     processed_resps = []

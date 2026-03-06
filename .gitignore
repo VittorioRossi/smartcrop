@@ -1,1 +1,8 @@
-/logs
+**/__pycache__/
+**/.DS_Store
+
+**/logs
+**/slurm_logs
+**/results
+
+*RESULTS_VERIFICATION.md

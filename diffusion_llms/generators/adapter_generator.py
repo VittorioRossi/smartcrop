@@ -23,8 +23,7 @@ from diffusion_llms.generators.base_length_generator import (
 )
 from dllm.core.generation.generator import (
     GeneratorOutput,
-    GeneratorConfig,
-    BaseGenerator
+    GeneratorConfig
 )
 
 
@@ -47,8 +46,7 @@ class AdapterGenerator(BaseLengthGenerator):
         
         adapter = torch.load(adapter_path, map_location=self.model.device)
         if isinstance(adapter, dict):
-            # If it's a state dict, we need to construct the MLP
-            # For now, assume it's already a nn.Module
+            # If it's a state dict, we need to construct the MLP architecture first
             raise ValueError("Adapter must be a saved nn.Module, not a state dict")
         
         adapter.eval()
@@ -137,7 +135,7 @@ class AdapterGenerator(BaseLengthGenerator):
                     torch.as_tensor(p, dtype=torch.long, device=self.model.device)
                 )
 
-        # If external length_prediction not provided and adapter is available, predict using MLP.
+        # If external length_prediction not provided and adapter is available, predict using MLP
         predicted_length: int | None = None
         if (
             config.length_prediction is None
@@ -165,7 +163,7 @@ class AdapterGenerator(BaseLengthGenerator):
                     f"length_estimator_fn must return a positive integer, got {predicted_length}"
                 )
 
-        # Build a base config clone and set length_prediction if we inferred one.
+        # Build a base config clone and set length_prediction if we inferred one
         base_cfg = BaseLengthGeneratorConfig()
         for attr in [
             "max_new_tokens",

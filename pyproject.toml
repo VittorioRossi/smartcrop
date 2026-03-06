@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 authors = [
     {name = "Davide Beltrame"},
-    {name = "Giacomo Ciro"},
+    {name = "Giacomo Cirò"},
     {name = "Luca Gandolfi"},
     {name = "Vittorio Rossi"},
 ]
@@ -57,7 +57,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/giacomo-ciro/diffusion-llms"
+Repository = "https://github.com/VittorioRossi/smartcrop"
 
 [tool.setuptools]
 package-dir = {"" = "."}
