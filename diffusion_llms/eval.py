@@ -26,6 +26,7 @@ from lm_eval.models.utils import get_dtype
 from diffusion_llms.utils import get_device, get_model, get_tokenizer
 from diffusion_llms.generators import BaseLengthGenerator, ZeroShotGenerator, AdapterGenerator
 from diffusion_llms.generators import ZeroShotGeneratorConfig, AdapterGeneratorConfig
+from diffusion_llms.generators import DaedalGenerator, DaedalGeneratorConfig
 from diffusion_llms.utils.efficiency_metrics import (
     compute_nfe_efficiency_from_generator_output,
 )
@@ -192,7 +193,7 @@ class VarLengthEvalHarness(LM):
         if generation_mode == "native":
             # we can just use the ZeroShotGenerator and passing quantile == 0.
             # It will not perform length prediction
-            self.generator_config_class = ZeroShotGeneratorConfig 
+            self.generator_config_class = ZeroShotGeneratorConfig
             self.generator = ZeroShotGenerator(model=self.model, tokenizer=self.tokenizer)
         elif generation_mode == "zero_shot":
             self.generator_config_class = ZeroShotGeneratorConfig
@@ -200,6 +201,9 @@ class VarLengthEvalHarness(LM):
         elif generation_mode == "adapter":
             self.generator_config_class = AdapterGeneratorConfig
             self.generator = AdapterGenerator(model=self.model, tokenizer=self.tokenizer)
+        elif generation_mode == "daedal":
+            self.generator_config_class = DaedalGeneratorConfig
+            self.generator = DaedalGenerator(model=self.model, tokenizer=self.tokenizer)
         else:
             raise ValueError(f"Unknown generation mode: {generation_mode}")
 
@@ -214,20 +218,36 @@ class VarLengthEvalHarness(LM):
         self.remasking = remasking
         self.logits_eos_inf = logits_eos_inf
 
-        self.generation_config = self.generator_config_class(
-            max_new_tokens=self.max_new_tokens,
-            max_length=self.max_length,
-            block_length=self.block_length,
-            steps=self.steps,
-            temperature=temperature,
-            remasking=self.remasking,
-            cfg_scale=self.cfg,
-            eos_quantile=eos_quantile,
-            safe_margin=safe_margin,
-            return_dict_in_generate=True,
-            measure_flops=True,
-            logits_eos_inf=self.logits_eos_inf,
-        )
+        if generation_mode == "daedal":
+            self.generation_config = DaedalGeneratorConfig(
+                max_new_tokens=self.max_new_tokens,
+                initial_gen_length=int(kwargs.get("initial_gen_length", 64)),
+                block_length=self.block_length,
+                temperature=temperature,
+                cfg_scale=self.cfg,
+                high_conf_threshold=float(kwargs.get("high_conf_threshold", 0.90)),
+                low_conf_threshold=float(kwargs.get("low_conf_threshold", 0.10)),
+                eos_confidence_threshold=float(kwargs.get("eos_confidence_threshold", 0.5)),
+                expand_eos_confidence_threshold=float(kwargs.get("expand_eos_confidence_threshold", 0.9)),
+                expansion_factor=int(kwargs.get("expansion_factor", 8)),
+                eos_check_tokens=int(kwargs.get("eos_check_tokens", 32)),
+                measure_flops=True,
+            )
+        else:
+            self.generation_config = self.generator_config_class(
+                max_new_tokens=self.max_new_tokens,
+                max_length=self.max_length,
+                block_length=self.block_length,
+                steps=self.steps,
+                temperature=temperature,
+                remasking=self.remasking,
+                cfg_scale=self.cfg,
+                eos_quantile=eos_quantile,
+                safe_margin=safe_margin,
+                return_dict_in_generate=True,
+                measure_flops=True,
+                logits_eos_inf=self.logits_eos_inf,
+            )
 
 
     def apply_chat_template(self, chat_history: list[dict[str, str]], add_generation_prompt: bool = True) -> str:
@@ -350,22 +370,40 @@ class VarLengthEvalHarness(LM):
             ).strip()
 
             # Compute efficiency metrics
-            config_dict = {
-                "max_new_tokens": self.max_new_tokens,
-                "block_length": self.block_length,
-                "steps": self.steps,
-                "cfg_scale": self.cfg,
-                "temperature": self.generation_config.temperature,
-                "remasking": self.remasking,
-            }
+            # For DAEDAL the NFE is tracked directly in the output (canvas size
+            # varies per step so scheduler-derived NFE would be meaningless).
+            daedal_nfe = getattr(generator_output, "nfe", None)
+            if daedal_nfe is not None:
+                nfe = daedal_nfe
+                nfe_per_token = nfe / max(generation_length, 1)
+                flops_per_token = (
+                    total_flops / max(generation_length, 1)
+                    if total_flops is not None else None
+                )
 
-            efficiency_metrics = compute_nfe_efficiency_from_generator_output(
-                generator_output,
-                prompt_lengths=[len(prompt[0])],
-                config=config_dict,
-                model_name=getattr(self.model, 'name_or_path', 'unknown'),
-                generation_mode=generation_method
-            )
+                class _EffMetrics:
+                    pass
+
+                efficiency_metrics = _EffMetrics()
+                efficiency_metrics.nfe = nfe
+                efficiency_metrics.nfe_per_token = nfe_per_token
+                efficiency_metrics.flops_per_token = flops_per_token
+            else:
+                config_dict = {
+                    "max_new_tokens": self.max_new_tokens,
+                    "block_length": self.block_length,
+                    "steps": self.steps,
+                    "cfg_scale": self.cfg,
+                    "temperature": self.generation_config.temperature,
+                    "remasking": self.remasking,
+                }
+                efficiency_metrics = compute_nfe_efficiency_from_generator_output(
+                    generator_output,
+                    prompt_lengths=[len(prompt[0])],
+                    config=config_dict,
+                    model_name=getattr(self.model, "name_or_path", "unknown"),
+                    generation_mode=generation_method,
+                )
 
             # Log with global example ID (doc_id) and task metadata
             log_generation_metrics(
