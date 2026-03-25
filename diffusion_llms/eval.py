@@ -21,7 +21,9 @@ from lm_eval.__main__ import cli_evaluate
 from lm_eval.api.instance import Instance
 from lm_eval.api.model import LM
 from lm_eval.api.registry import register_model
-from lm_eval.models.utils import get_dtype
+def get_dtype(dtype):
+    _map = {"float16": torch.float16, "float32": torch.float32, "bfloat16": torch.bfloat16}
+    return _map.get(dtype, torch.bfloat16) if isinstance(dtype, str) else dtype
 
 from diffusion_llms.utils import get_device, get_model, get_tokenizer
 from diffusion_llms.generators import BaseLengthGenerator, ZeroShotGenerator, AdapterGenerator

@@ -64,6 +64,10 @@ class DaedalGeneratorOutput(BaseGeneratorOutput):
 class DaedalGenerator(BaseGenerator):
 
     @torch.no_grad()
+    def infill(self, inputs, config=None, **kwargs):
+        raise NotImplementedError("DAEDAL does not support infilling")
+
+    @torch.no_grad()
     def generate(
         self,
         prompts: PromptInput,
