@@ -24,6 +24,7 @@ import json
 import os
 import re
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -291,8 +292,10 @@ def main():
 
         # Accumulators per checkpoint
         correct_counts = {k: 0 for k in checkpoint_steps}
+        canvas_t0 = time.time()
 
         for i, (prompt_ids, gold) in enumerate(examples):
+            ex_t0 = time.time()
             ex_results = run_one_example(
                 generator=generator,
                 model=model,
@@ -305,6 +308,13 @@ def main():
                 eos_id=eos_id,
                 device=device,
             )
+            ex_elapsed = time.time() - ex_t0
+
+            lens_str = "  ".join(
+                f"k={r['checkpoint_k']}:len={r['predicted_len']},{'✓' if r['correct'] else '✗'}"
+                for r in ex_results
+            )
+            print(f"  ex {i+1:3d}/{len(examples)}  ({ex_elapsed:.1f}s)  {lens_str}", flush=True)
 
             for r in ex_results:
                 k = r["checkpoint_k"]
@@ -321,9 +331,10 @@ def main():
                 })
 
             if (i + 1) % 10 == 0:
+                elapsed = time.time() - canvas_t0
                 running = {k: correct_counts[k] / (i + 1) for k in checkpoint_steps}
-                print(f"  [{i+1}/{len(examples)}] running acc: "
-                      + "  ".join(f"k={k}:{v:.3f}" for k, v in running.items()))
+                print(f"  --- [{i+1}/{len(examples)}] elapsed={elapsed:.0f}s  running acc: "
+                      + "  ".join(f"k={k}:{v:.3f}" for k, v in running.items()), flush=True)
 
         for k in checkpoint_steps:
             acc = correct_counts[k] / len(examples)
