@@ -33,6 +33,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+import numpy as np
 import torch
 
 PROJECT_ROOT = Path(__file__).parent.parent.resolve()
@@ -129,39 +130,36 @@ def run_one_example(
     mask_id: int,
     eos_id: int,
     device: torch.device,
-) -> tuple[list[dict], list[dict]]:
+) -> tuple[list[dict], list[dict], dict[int, np.ndarray]]:
     """
     Returns:
-      curve_rows  — predicted_len at every record_every callback fires
-      gen_rows    — generation + accuracy at eval_steps checkpoints
+      curve_rows      — predicted_len at every record_every callback fires
+      gen_rows        — generation + accuracy at eval_steps checkpoints
+      survival_arrays — {step: S(t) array of shape [canvas_size]}
+                        S(t) = P(sequence not ended by position t)
     """
     prompt_len = prompt_ids.shape[0]
 
-    # step -> predicted new token count (recorded every record_every steps)
+    # step -> predicted new token count
     survival_curve: dict[int, int] = {}
+    # step -> full survival function S(t), shape [canvas_size]
+    survival_arrays: dict[int, np.ndarray] = {}
 
     def _callback(state: dict):
         step = state["step"]
         if step % record_every != 0:
             return
-        logits_k = state["logits"][:, prompt_len:, :]
-        full_logits = torch.cat([
-            torch.zeros(1, prompt_len, logits_k.shape[-1], device=device),
-            logits_k,
-        ], dim=1)
-        pred = compute_zero_shot_length_prediction(
-            model=model,
-            prompt=prompt_ids,
-            mask_id=mask_id,
-            eos_id=eos_id,
-            max_new_tokens=canvas_size,
-            eos_quantile=EOS_QUANTILE,
-            safe_margin=0,
-            device=device,
-            logits=full_logits,
-        )
-        survival_curve[step] = max(1, pred - prompt_len) if pred is not None else canvas_size
-        # full_logits released here — no persistent storage
+        logits_k = state["logits"][:, prompt_len:, :]  # [1, canvas_size, V]
+        with torch.no_grad():
+            step_probs  = torch.softmax(logits_k[0], dim=-1)     # [canvas_size, V]
+            eos_probs   = step_probs[:, eos_id]                   # [canvas_size]
+            not_stopped = torch.cumprod(1.0 - eos_probs, dim=0)  # S(t)
+            stopped     = 1.0 - not_stopped
+            cutoff      = torch.where(stopped >= EOS_QUANTILE)[0]
+            gen_tokens  = int(cutoff[0].item()) + 1 if cutoff.numel() > 0 else canvas_size
+        survival_curve[step]  = max(1, gen_tokens)
+        survival_arrays[step] = not_stopped.cpu().float().numpy()
+        # all tensors released here
 
     fc_cfg = BaseLengthGeneratorConfig(
         max_new_tokens  = canvas_size,
@@ -217,7 +215,7 @@ def run_one_example(
             "gold":          gold,
         })
 
-    return curve_rows, gen_rows
+    return curve_rows, gen_rows, survival_arrays
 
 
 # ---------------------------------------------------------------------------
@@ -287,7 +285,7 @@ def main():
 
         for i, (prompt_ids, gold) in enumerate(examples):
             ex_t0 = time.time()
-            curve_rows, gen_rows = run_one_example(
+            curve_rows, gen_rows, survival_arrays = run_one_example(
                 generator=generator,
                 model=model,
                 tokenizer=tokenizer,
@@ -317,6 +315,13 @@ def main():
             # Update accuracy counts
             for r in gen_rows:
                 correct_counts[r["checkpoint_k"]] += r["correct"]
+
+            # Save survival function arrays to npz (step -> S(t) for this example)
+            npz_path = out_dir / f"survival_arrays_canvas{canvas_size}.npz"
+            existing = dict(np.load(npz_path)) if npz_path.exists() else {}
+            for step, arr in survival_arrays.items():
+                existing[f"ex{i}_step{step}"] = arr
+            np.savez_compressed(npz_path, **existing)
 
             # Flush survival curve rows
             with open(curve_csv_path, "a", newline="") as f:
