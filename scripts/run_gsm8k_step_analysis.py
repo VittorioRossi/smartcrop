@@ -147,7 +147,7 @@ def run_one_example(
         steps           = canvas_size,   # one token unmasked per step
         temperature     = 0.0,
         remasking       = "low_confidence",
-        logits_eos_inf  = True,
+        logits_eos_inf  = False,  # must keep EOS logits intact for CDF prediction
         step_callback   = _cache_callback,
     )
     # We discard the FC output — we only need the cached logits
