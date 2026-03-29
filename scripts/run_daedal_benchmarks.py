@@ -37,13 +37,15 @@ from diffusion_llms.utils.merge_logs import merge_rank_logs, verify_merged_logs
 
 DEFAULT_MODEL = "GSAI-ML/LLaDA-8B-Instruct"
 
-# Mirror SmartCrop task configs so FLOPs comparisons are apples-to-apples.
-# DAEDAL has no fixed step budget (T), but we keep max_tokens identical.
+# Task configs for DAEDAL rebuttal comparison.
+# max_tokens follows DAEDAL paper where available; 2048 for new tasks.
+# num_fewshot: None = use task default (e.g. BBH uses 3-shot by default)
 TASK_CONFIGS = {
-    "humaneval_instruct_local": {"max_tokens": 512,  "block_length": 32},
-    "gsm8k_cot_llama":          {"max_tokens": 256,  "block_length": 32},
-    "ifeval":                   {"max_tokens": 1280, "block_length": 32},
-    "longformqa":               {"max_tokens": 512,  "block_length": 32},
+    "humaneval_instruct_local":    {"max_tokens": 2048, "block_length": 32, "num_fewshot": 0},
+    "gsm8k_cot_llama":             {"max_tokens": 2048, "block_length": 32, "num_fewshot": 0},
+    "ifeval":                      {"max_tokens": 2048, "block_length": 32, "num_fewshot": 0},
+    "bbh_cot_fewshot":   {"max_tokens": 1024, "block_length": 32, "num_fewshot": 3},
+    "math500":                     {"max_tokens": 2048, "block_length": 32, "num_fewshot": 0},
 }
 
 # DAEDAL hyperparameters (reference values from Li et al. eval scripts)
@@ -92,14 +94,16 @@ def run_single_evaluation(
             "task_dir": str(exp_dirs.setup_task_quantile(task, DAEDAL_QUANTILE_SENTINEL)),
         }
 
-    task_cfg = TASK_CONFIGS.get(task, {"max_tokens": 512, "block_length": 32})
-    max_tokens  = task_cfg["max_tokens"]
-    block_length = task_cfg["block_length"]
-
     task_dir     = exp_dirs.setup_task_quantile(task, DAEDAL_QUANTILE_SENTINEL)
     rank_log_dir = exp_dirs.get_rank_log_dir(task, DAEDAL_QUANTILE_SENTINEL)
     samples_path = exp_dirs.get_samples_path(task, DAEDAL_QUANTILE_SENTINEL)
     metrics_path = exp_dirs.get_metrics_path(task, DAEDAL_QUANTILE_SENTINEL)
+
+    task_cfg    = TASK_CONFIGS.get(task, {"max_tokens": 512, "block_length": 32, "num_fewshot": 0})
+    max_tokens   = task_cfg["max_tokens"]
+    block_length = task_cfg["block_length"]
+    # Use per-task num_fewshot unless the caller overrides
+    effective_fewshot = num_fewshot if num_fewshot != 0 else task_cfg.get("num_fewshot", 0)
 
     model_args_parts = [
         f"pretrained={model}",
@@ -141,7 +145,7 @@ def run_single_evaluation(
         "--tasks", task,
         "--model", "llada",
         "--device", device,
-        "--num_fewshot", str(num_fewshot),
+        "--num_fewshot", str(effective_fewshot),
         "--model_args", model_args,
         "--seed", str(seed),
         "--output_path", str(task_dir),
