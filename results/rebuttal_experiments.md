@@ -281,6 +281,35 @@ Job 470963 = first clean HumanEval run (max=512): **pass@1 = 0.4878** (same as 4
 
 ---
 
+## 10. SmartCrop Generalization to BERT-Based Diffusion Models (Reviewer Request)
+
+**Purpose:** Investigate whether SmartCrop generalizes beyond LLaDA to other masked diffusion LMs, specifically `dllm-hub/ModernBERT-large-chat-v0.1` (BERT-Chat) — a ModernBERT encoder finetuned as a chatbot via masked diffusion (same MDLM training objective as LLaDA).
+
+**Model:** `dllm-hub/ModernBERT-large-chat-v0.1` (~395M params, ModernBERT-large backbone, SFT on tulu-3-sft-mixture + smoltalk).
+
+**Test:** Local forward-pass experiment on 2 GSM8K examples using the all-masked k=0 probe (SmartCrop's core step). Tested canvas sizes 32, 64, 128, 256.
+
+**Results:**
+
+| Canvas size | Predicted length | EOS peak position | EOS peak prob |
+|---|---|---|---|
+| 32  | 26  | 31  (last) | 0.916 |
+| 64  | 62  | 63  (last) | 0.777 |
+| 128 | 121 | 127 (last) | 0.934 |
+| 256 | 249 | 255 (last) | 0.957 |
+
+**Key findings:**
+
+1. **EOS signal is uninformative.** Predicted length scales linearly with canvas size (~95% of canvas in all cases). The model places EOS mass at the very end of the masked region regardless of prompt content. SmartCrop's survival function only detects "the sequence ends near the canvas boundary," not the actual answer length.
+
+2. **Generation quality is degenerate.** Single-step greedy decoding on a 64-token canvas produces: `"Janet lays 16 eggs for day day for for for for for for..."` — repetitive garbage typical of a model too small or insufficiently trained for instruction following. Published benchmark: GSM8K 9.3%, BBH 25.6% — far below LLaDA-8B-Instruct (56.6% GSM8K).
+
+3. **Root cause:** ModernBERT is a bidirectional encoder. Unlike LLaDA's 8B model (which develops a content-aware EOS distribution from large-scale masked diffusion pretraining), ModernBERT-Chat's all-masked forward pass cannot localize EOS within a masked region — it sees all positions simultaneously and lacks the scale/training to infer answer length from an all-masked canvas.
+
+**Conclusion:** SmartCrop does not transfer to BERT-Chat. The EOS survival function requires a model that (a) has sufficient capacity and training to produce content-aware EOS probability distributions, and (b) has been trained at sufficient scale on diverse generation tasks. The correct candidate for a cross-model generalization experiment is `Dream-v0-Instruct-7B` (7B params, strong benchmarks), but this requires porting SmartCrop to Dream's entropy-based generation algorithm (see Section 7).
+
+---
+
 ## Summary Table (Rebuttal Key Numbers)
 
 | Method              | HumanEval pass@1 | GSM8K flex | GSM8K strict |
