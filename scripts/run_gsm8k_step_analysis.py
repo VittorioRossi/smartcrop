@@ -260,12 +260,21 @@ def load_mbpp_examples(n: int, seed: int, tokenizer, device):
 def ifeval_correct(prediction: str, doc: dict) -> int:
     """Check IFEval prompt-level strict accuracy."""
     try:
+        import inspect
         from lm_eval.tasks.ifeval.instructions_registry import INSTRUCTION_DICT
-        instructions = [
-            INSTRUCTION_DICT[i](instruction_id=i, **k)
-            for i, k in zip(doc["instruction_id_list"], doc["kwargs"])
-            if i in INSTRUCTION_DICT
-        ]
+        instructions = []
+        for i, k in zip(doc["instruction_id_list"], doc["kwargs"]):
+            if i not in INSTRUCTION_DICT:
+                continue
+            instr = INSTRUCTION_DICT[i](instruction_id=i)
+            sig = inspect.signature(instr.build_description)
+            valid = set(sig.parameters.keys()) - {"self"}
+            filtered_k = {key: val for key, val in k.items() if key in valid}
+            try:
+                instr.build_description(**filtered_k)
+            except Exception:
+                continue
+            instructions.append(instr)
         if not instructions:
             return 0
         return int(all(instr.check_following(prediction) for instr in instructions))
