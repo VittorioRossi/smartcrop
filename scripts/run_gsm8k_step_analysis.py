@@ -529,8 +529,16 @@ def main():
     curve_csv_path = out_dir / "survival_curve_raw.csv"
     gen_csv_path   = out_dir / "generation_results.csv"
 
-    curve_header_written = False
-    gen_header_written   = False
+    # --- Resume: find already-completed example_ids from existing gen CSV ---
+    completed_ids: set[int] = set()
+    curve_header_written = gen_csv_path.exists() and gen_csv_path.stat().st_size > 0
+    gen_header_written   = curve_csv_path.exists() and curve_csv_path.stat().st_size > 0
+    if gen_csv_path.exists() and gen_csv_path.stat().st_size > 0:
+        with open(gen_csv_path, newline="") as f:
+            for row in csv.DictReader(f):
+                completed_ids.add(int(row["example_id"]))
+    if completed_ids:
+        print(f"Resuming: {len(completed_ids)} examples already done, skipping them.")
 
     for canvas_size in args.canvas_sizes:
         eval_steps = sorted(set(int(f * canvas_size) for f in EVAL_FRACS))
@@ -545,6 +553,9 @@ def main():
         canvas_t0 = time.time()
 
         for i, (prompt_ids, gold, doc) in enumerate(examples):
+            if i in completed_ids:
+                print(f"  ex {i+1:3d}/{len(examples)}  [SKIPPED]", flush=True)
+                continue
             ex_t0 = time.time()
             curve_rows, gen_rows, survival_arrays = run_one_example(
                 generator=generator,

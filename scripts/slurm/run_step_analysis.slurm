@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name="step-analysis"
 #SBATCH --account=3188641
-#SBATCH --partition=medium_gpunew
+#SBATCH --partition=gpunew
 #SBATCH --cpus-per-task=4
 #SBATCH --nodes=1
 #SBATCH --gpus-per-node=1
@@ -37,7 +37,8 @@ MODEL="${MODEL:-GSAI-ML/LLaDA-8B-Instruct}"
 # Safe model tag for directory names (replace / with __)
 MODEL_TAG=$(echo "$MODEL" | tr '/' '__')
 
-OUTPUT_DIR="${PROJECT_DIR}/results/rebuttal/step_analysis_${TASK}_${MODEL_TAG}_${SLURM_JOB_ID}"
+# Pass OUTPUT_DIR explicitly to resume a previous run; otherwise create a new one
+OUTPUT_DIR="${OUTPUT_DIR:-${PROJECT_DIR}/results/rebuttal/step_analysis_${TASK}_${MODEL_TAG}_${SLURM_JOB_ID}}"
 mkdir -p "$OUTPUT_DIR"
 mkdir -p "$USER_HOME/logs/slurm"
 
