@@ -1,0 +1,32 @@
+task: humaneval_instruct_local
+dataset_path: openai/openai_humaneval
+test_split: test
+output_type: generate_until
+doc_to_text: "Complete the following python code:\n{{prompt}}"
+doc_to_target: "{{test}}\ncheck({{entry_point}})"
+unsafe_code: true
+
+metric_list:
+  - metric: !function utils.pass_at_k
+    aggregation: mean
+    higher_is_better: true
+    k: [1]
+
+generation_kwargs:
+  until: []
+  max_gen_toks: 512
+  do_sample: false
+
+repeats: 1
+num_fewshot: 0
+
+filter_list:
+  - name: "create_test"
+    filter:
+      - function: "custom"
+        filter_fn: !function utils.humaneval_postprocess_v2
+      - function: "custom"
+        filter_fn: !function utils.build_predictions
+
+metadata:
+  version: 1.0

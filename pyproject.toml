@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smartcrop"
+version = "0.1.0"
+description = "Diffusion Language Models Are Natively Length Aware"
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+authors = [
+    {name = "Vittorio Rossi"},
+    {name = "Giacomo Cirò"},
+    {name = "Davide Beltrame"},
+    {name = "Luca Gandolfi"},
+    {name = "Paul Röttger"},
+    {name = "Dirk Hovy"},
+]
+keywords = [
+    "diffusion",
+    "language-models",
+    "text-generation",
+    "efficiency",
+    "length-prediction",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    # dllm is installed separately from the submodule, see requirements.txt.
+    "torch==2.8.0",
+    "transformers==4.57.0",
+    "accelerate==1.11.0",
+    "lm-eval==0.4.11",
+    "datasets==4.2.0",
+    "evaluate==0.4.6",
+    "numpy==2.2.6",
+    "pandas==2.3.3",
+    "tqdm==4.67.3",
+    "jsonlines==4.0.0",
+    "PyYAML==6.0.3",
+    "scipy==1.15.3",
+]
+
+[project.urls]
+Repository = "https://github.com/VittorioRossi/smartcrop"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["diffusion_llms*"]
+
+[tool.setuptools.package-data]
+diffusion_llms = ["**/*.yml", "**/*.yaml", "**/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
